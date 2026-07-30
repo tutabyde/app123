@@ -53,14 +53,36 @@ export default function Register() {
     setLoading(true);
 
     try {
+      const response = await fetch('https://yoyo-defective-glutton.ngrok-free.dev/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          invitationCode,
+          phone,
+          password,
+          withdrawPassword
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.message || 'Error al registrarse');
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      
       setSuccess(true);
 
       setTimeout(() => {
         navigate("/home");
-      }, 800);
+      }, 1000);
 
     } catch (err) {
-      setError(err.message || "Error al registrarse");
+      setError('Error de conexión');
       setLoading(false);
     }
   };
