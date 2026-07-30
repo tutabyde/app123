@@ -15,6 +15,56 @@ export default function Register() {
 
   const navigate = useNavigate();
 
+  const [invitationCode, setInvitationCode] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [withdrawPassword, setWithdrawPassword] = useState("");
+  const [confirmWithdrawPassword, setConfirmWithdrawPassword] = useState("");
+  
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    
+    if (!invitationCode || !phone || !password || !confirmPassword || !withdrawPassword || !confirmWithdrawPassword) {
+      setError("Por favor completa todos los campos");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
+    if (withdrawPassword !== confirmWithdrawPassword) {
+      setError("Las contraseñas de retiro no coinciden");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    setError("");
+    setLoading(true);
+
+    try {
+      setSuccess(true);
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 800);
+
+    } catch (err) {
+      setError(err.message || "Error al registrarse");
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="
       min-h-screen
@@ -37,18 +87,15 @@ export default function Register() {
         pb-10
       ">
 
-        {/* Header */}
-
         <button
           onClick={() => navigate(-1)}
           className="text-gray-700 mb-8"
+          disabled={loading || success}
         >
           <ArrowLeft size={26}/>
         </button>
 
-
         <section className="text-center">
-
           <h1 className="
             text-3xl
             font-bold
@@ -57,7 +104,6 @@ export default function Register() {
             Crear cuenta
           </h1>
 
-
           <p className="
             mt-2
             text-sm
@@ -65,93 +111,124 @@ export default function Register() {
           ">
             Completa la información para registrarte
           </p>
-
         </section>
 
-
-        {/* Formulario */}
-
-        <section className="mt-8 space-y-4">
-
-
-          {/* Código invitación */}
+        <form onSubmit={handleRegister} className="mt-8 space-y-4">
 
           <InputBox
             icon={<Ticket size={22}/>}
             title="Código de invitación"
             placeholder="Ingresa tu código de invitación"
+            value={invitationCode}
+            onChange={(e) => setInvitationCode(e.target.value)}
+            disabled={loading || success}
           />
-
-
-          {/* Teléfono */}
 
           <InputBox
             icon={<Phone size={22}/>}
             title="Número de teléfono"
             placeholder="Ingresa tu número de teléfono"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            disabled={loading || success}
           />
-
-
-          {/* Password */}
 
           <InputBox
             icon={<Lock size={22}/>}
             title="Contraseña"
             placeholder="Ingresa tu contraseña"
+            type="password"
             eye
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={loading || success}
           />
-
 
           <InputBox
             icon={<Lock size={22}/>}
             title="Confirmar contraseña"
             placeholder="Confirma tu contraseña"
+            type="password"
             eye
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            disabled={loading || success}
           />
-
 
           <InputBox
             icon={<ShieldCheck size={22}/>}
             title="Contraseña de retiro"
             placeholder="Ingresa tu contraseña de retiro"
+            type="password"
             eye
+            value={withdrawPassword}
+            onChange={(e) => setWithdrawPassword(e.target.value)}
+            disabled={loading || success}
           />
-
 
           <InputBox
             icon={<ShieldCheck size={22}/>}
             title="Confirmar contraseña de retiro"
             placeholder="Confirma tu contraseña de retiro"
+            type="password"
             eye
+            value={confirmWithdrawPassword}
+            onChange={(e) => setConfirmWithdrawPassword(e.target.value)}
+            disabled={loading || success}
           />
 
+          {error && (
+            <p className="
+              text-center
+              text-sm
+              text-red-600
+              font-semibold
+              bg-red-100
+              px-4
+              py-3
+              rounded-xl
+            ">
+              {error}
+            </p>
+          )}
 
-        </section>
+          {success && (
+            <p className="
+              text-center
+              text-sm
+              text-green-600
+              font-semibold
+              bg-green-100
+              px-4
+              py-3
+              rounded-xl
+            ">
+              ¡Registro exitoso!
+            </p>
+          )}
 
+          <button
+            type="submit"
+            disabled={loading || success}
+            className="
+              mt-8
+              w-full
+              h-12
+              rounded-xl
+              bg-gradient-to-r
+              from-purple-600
+              to-purple-500
+              text-white
+              font-semibold
+              text-lg
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+            "
+          >
+            {loading ? "Registrando..." : "Registrarse"}
+          </button>
 
-
-        {/* Botón */}
-
-        <button
-          className="
-            mt-8
-            w-full
-            h-12
-            rounded-xl
-            bg-gradient-to-r
-            from-purple-600
-            to-purple-500
-            text-white
-            font-semibold
-            text-lg
-          "
-        >
-          Registrarse
-        </button>
-
-
-
-        {/* Login */}
+        </form>
 
         <p className="
           text-center
@@ -159,9 +236,7 @@ export default function Register() {
           text-gray-500
           mt-6
         ">
-
           ¿Ya tienes cuenta?
-
           <button
             onClick={() => navigate("/login")}
             className="
@@ -169,36 +244,35 @@ export default function Register() {
               text-purple-600
               font-semibold
             "
+            disabled={loading || success}
           >
             Inicia sesión
           </button>
-
         </p>
 
-
       </div>
-
 
     </main>
   );
 }
 
 
-
-
 function InputBox({
   icon,
   title,
   placeholder,
-  eye
+  eye,
+  type = "text",
+  value,
+  onChange,
+  disabled = false
 }) {
 
   const [showPassword, setShowPassword] = useState(false);
 
-
   return (
 
-    <div className="
+    <div className={`
       h-16
       border
       border-gray-200
@@ -207,16 +281,14 @@ function InputBox({
       items-center
       px-4
       gap-3
-    ">
-
+      ${disabled ? 'opacity-60 cursor-not-allowed' : ''}
+    `}>
 
       <div className="text-purple-600">
         {icon}
       </div>
 
-
       <div className="flex-1">
-
 
         <p className="
           text-xs
@@ -226,45 +298,38 @@ function InputBox({
           {title}
         </p>
 
-
-
         <input
-
           type={
             eye
               ? showPassword
                 ? "text"
                 : "password"
-              : "text"
+              : type
           }
-
-
           placeholder={placeholder}
-
-
+          value={value}
+          onChange={onChange}
+          disabled={disabled}
           className="
             w-full
             text-sm
             outline-none
             placeholder-gray-400
             text-gray-500
+            disabled:bg-gray-50
+            disabled:cursor-not-allowed
           "
-
         />
-
 
       </div>
 
-
-
       {
         eye && (
-
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
+            disabled={disabled}
           >
-
             {
               showPassword
                 ?
@@ -278,17 +343,11 @@ function InputBox({
                   className="text-gray-400"
                 />
             }
-
-
           </button>
-
         )
       }
-
-
 
     </div>
 
   );
-
 }
