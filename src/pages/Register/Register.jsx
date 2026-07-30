@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import {
   ArrowLeft,
@@ -15,7 +15,12 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const [invitationCode, setInvitationCode] = useState("");
+  const [searchParams] = useSearchParams();
+
+  const urlInvitation = searchParams.get("ref");
+
+  const [invitationCode, setInvitationCode] = useState(urlInvitation || "");
+
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -143,7 +148,7 @@ export default function Register() {
             placeholder="Ingresa tu código de invitación"
             value={invitationCode}
             onChange={(e) => setInvitationCode(e.target.value)}
-            disabled={loading || success}
+            disabled={loading || success || !!urlInvitation}
           />
 
           <InputBox

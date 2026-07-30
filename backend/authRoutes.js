@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
   }
 
   if (phone.length !== 9) {
-    return res.status(400).json({ message: 'Teléfono debe tener 9 números' });
+    return res.status(400).json({ message: 'Número de celular debe tener 9 números' });
   }
 
   if (password.length !== 6 || withdrawPassword.length !== 6) {
@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
     );
 
     if (userExists.rows.length > 0) {
-      return res.status(400).json({ message: 'Teléfono o código de invitación ya existe' });
+      return res.status(400).json({ message: 'Número de celular ya registrado' });
     }
 
     const result = await pool.query(
@@ -93,7 +93,7 @@ router.post('/login', async (req, res) => {
   const { phone, password } = req.body;
 
   if (!phone || !password) {
-    return res.status(400).json({ message: 'Teléfono y contraseña son requeridos' });
+    return res.status(400).json({ message: 'Número de celular y contraseña son requeridos' });
   }
 
   try {
@@ -103,14 +103,14 @@ router.post('/login', async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: 'Teléfono o contraseña incorrectos' });
+      return res.status(401).json({ message: 'Número de celular o contraseña incorrectos' });
     }
 
     const user = result.rows[0];
     const isPasswordValid = password === user.password;
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Teléfono o contraseña incorrectos' });
+      return res.status(401).json({ message: 'Número de celular o contraseña incorrectos' });
     }
 
     const token = jwt.sign(
