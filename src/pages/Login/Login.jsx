@@ -1,10 +1,51 @@
 import banner from "../../assets/images/login-banner.png";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 
 export default function Login() {
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+
+  try {
+
+    setError("");
+
+    const response = await axios.post(
+      "https://yoyo-defective-glutton.ngrok-free.dev/api/auth/login",
+      {
+        phone,
+        password
+      }
+    );
+
+
+    localStorage.setItem(
+      "token",
+      response.data.token
+    );
+
+
+    navigate("/home");
+
+
+  } catch(error){
+
+    setError(
+      error.response?.data?.message || 
+      "Error al iniciar sesión"
+    );
+
+  }
+
+};
+
   return (
     <main className="min-h-screen flex justify-center bg-[linear-gradient(135deg,#f6ecff_0%,#fdf7ff_45%,#ffffff_100%)]">
       <div className="w-full max-w-sm px-6 py-10">
@@ -44,6 +85,8 @@ export default function Login() {
               outline-none
               focus:border-purple-500
             "
+            value={phone}
+            onChange={(e)=>setPhone(e.target.value)}
           />
 
         </div>
@@ -69,6 +112,8 @@ export default function Login() {
               outline-none
               focus:border-purple-500
             "
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
           />
 
         </div>
@@ -86,6 +131,7 @@ export default function Login() {
         {/* Botón */}
 
         <button
+          onClick={handleLogin}
           className="
             w-full
             h-14
@@ -99,6 +145,11 @@ export default function Login() {
         >
           Iniciar sesión
         </button>
+        {error && (
+          <p className="mt-3 text-center text-red-500 text-sm">
+            {error}
+          </p>
+        )}  
 
         {/* Separador */}
 

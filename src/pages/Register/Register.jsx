@@ -148,8 +148,8 @@ export default function Register() {
 
           <InputBox
             icon={<Phone size={22}/>}
-            title="Número de teléfono"
-            placeholder="Ingresa tu número de teléfono"
+            title="Número de celular"
+            placeholder="Ingresa tu número de celular"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             disabled={loading || success}
