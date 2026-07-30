@@ -1,6 +1,10 @@
 import banner from "../../assets/images/login-banner.png";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Login() {
+
+  const navigate = useNavigate();
   return (
     <main className="min-h-screen flex justify-center bg-[linear-gradient(135deg,#f6ecff_0%,#fdf7ff_45%,#ffffff_100%)]">
       <div className="w-full max-w-sm px-6 py-10">
@@ -129,6 +133,7 @@ export default function Login() {
           </p>
 
           <button
+            onClick={() => navigate("/register")}
             className="
               w-full
               h-12

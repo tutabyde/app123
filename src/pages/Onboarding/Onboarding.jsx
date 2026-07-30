@@ -1,6 +1,9 @@
 import onboarding from "../../assets/images/onboarding.png";
+import { useNavigate } from "react-router-dom";
 
 export default function Onboarding() {
+
+  const navigate = useNavigate();
   return (
     <main className="
     min-h-screen
@@ -63,6 +66,7 @@ export default function Onboarding() {
           </div>
 
           <button
+            onClick={() => navigate("/login")}
             className="
             w-full
             h-14
@@ -77,6 +81,7 @@ export default function Onboarding() {
           </button>
 
           <button
+            onClick={() => navigate("/login")}
             className="
             w-full
             mt-5
