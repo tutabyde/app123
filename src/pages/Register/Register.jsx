@@ -117,7 +117,7 @@ export default function Register() {
       ">
 
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/login")}
           className="text-gray-700 mb-8"
           disabled={loading || success}
         >
