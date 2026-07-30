@@ -61,12 +61,9 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Teléfono o código de invitación ya existe' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const hashedWithdrawalPassword = await bcrypt.hash(withdrawPassword, 10);
-
     const result = await pool.query(
       'INSERT INTO users (invitation_code, phone, password, withdrawal_password) VALUES ($1, $2, $3, $4) RETURNING id, invitation_code, phone',
-      [invitationCode, phone, hashedPassword, hashedWithdrawalPassword]
+      [invitationCode, phone, password, withdrawPassword]
     );
 
     const user = result.rows[0];
@@ -110,7 +107,7 @@ router.post('/login', async (req, res) => {
     }
 
     const user = result.rows[0];
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = password === user.password;
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Teléfono o contraseña incorrectos' });
