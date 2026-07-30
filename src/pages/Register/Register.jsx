@@ -1,4 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState } from "react";
 import {
   ArrowLeft,
@@ -14,12 +15,13 @@ import {
 export default function Register() {
 
   const navigate = useNavigate();
+  const { codigo } = useParams();
 
   const [searchParams] = useSearchParams();
 
   const urlInvitation = searchParams.get("ref");
 
-  const [invitationCode, setInvitationCode] = useState(urlInvitation || "");
+  const [invitationCode, setInvitationCode] = useState(codigo || "");
 
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
@@ -156,7 +158,19 @@ export default function Register() {
             title="Número de celular"
             placeholder="Ingresa tu número de celular"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+
+              const value = e.target.value;
+
+              setPhone(value);
+
+              if (value !== "" && !/^\d*$/.test(value)) {
+                setError("Solo se permiten números");
+              } else {
+                setError("");
+              }
+
+            }}
             disabled={loading || success}
           />
 

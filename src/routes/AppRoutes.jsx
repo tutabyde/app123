@@ -19,6 +19,8 @@ export default function AppRoutes() {
 
         <Route path="/register" element={<Register />} />
 
+        <Route path="/r/:codigo" element={<Register />} />
+
         <Route path="/home" element={<Home />} />
 
       </Routes>
